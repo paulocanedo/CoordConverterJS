@@ -47,27 +47,33 @@
 		}
 
 		function test() {
-			//entry coord:     latitude: 10°10'51.94" S longitude: 48°20'17.16" W
-			//output expected: E: 791668.000, N: 8873367.000 Zone: 22
+			//entry coord:     latitude: 10°10'52.14396" S longitude: 48°20'16.79136" W
+			//output expected: E: 791679.526, 8873360.353 Zone: 22
 
 			ellipsoid = new Ellipsoid(DatumFactory.SIRGAS);
-			latitude  = new Latitude (AngleValue.dms2dd(10, 10, 51.94, false));
-			longitude = new Longitude(AngleValue.dms2dd(48, 20, 17.16, false));
+			latitude  = new Latitude (AngleValue.dms2dd(10, 10, 52.14396, false));
+			longitude = new Longitude(AngleValue.dms2dd(48, 20, 16.79136, false));
 
 			geoCoord = new GeographicCoordinate(ellipsoid, latitude, longitude);
-			utmCoord = new UTMCoordinate(ellipsoid, 22, Hemisphere.SOUTH, 791668.350, 8873367.715, 0.0);
+			utmCoord = new UTMCoordinate(ellipsoid, 22, Hemisphere.SOUTH, 791679.526, 8873360.353, 0.0);
 
 			var errorMessage = '';
-			try { 
+			/*try { 
 				testGeoToUTM(geoCoord, utmCoord); 
-			} catch(ex) {errorMessage += ex + '<br /><br />';}
+			} catch(ex) {errorMessage += ex + '<br /><br />';}*/
 			try { 
 				testUtmToGeo(utmCoord, geoCoord); 
 			} catch(ex) {errorMessage += ex;}
 
+			var msgConversion = '';
+			msgConversion += geoCoord.toString() + ' -> ' + geoCoord.toUTM().toString() + '<br />';
+			msgConversion += utmCoord.toString() + ' -> ' + utmCoord.toGeodesic().toString();
+
 			var title = (errorMessage == '') ? 'test passed' : 'test failed';
 			var type  = (errorMessage == '') ? 'success' : 'error';
-			displayMessage('<h2>' + title + '</h2>' + '<p>' + errorMessage + '</p>', type);
+			var msg   = (errorMessage == '') ? msgConversion : errorMessage;
+
+			displayMessage('<h2>' + title + '</h2>' + '<p>' + msg + '</p>', type);
 			
 			//logs(gcoord + " -> " + utcoord + " Zone: " + utcoord.getZone());
 		}

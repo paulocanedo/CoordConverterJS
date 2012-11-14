@@ -38,7 +38,7 @@ Latitude.prototype.toRadians = function() {
 
 Latitude.prototype.equals = function(otherObj) {
     if(otherObj instanceof Latitude) {
-        return Math.compareFloat(this.toDegreeDecimal(), otherObj.toDegreeDecimal());
+        return Math.compareFloat(this.toDegreeDecimal(), otherObj.toDegreeDecimal(), 6);
     }
     return false;
 };

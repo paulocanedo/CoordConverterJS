@@ -1,4 +1,4 @@
 CoordConverterJS
 ================
 
-Coodinator conversor Geographic - UTM in javascript
+Coordinate conversor Geographic - UTM in javascript
