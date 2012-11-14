@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt">
+	<head>
+		<meta charset="utf-8" />
+		<title>Coordinate Converter JS</title>
+	</head>
+	<body onLoad="test();">
+		<div id="msgContainer" style="padding: 5px;">
+			
+		</div>
+
+	<script type="text/javascript">
+		function displayMessage(msg, type) {
+			var container = document.getElementById("msgContainer");
+			if(type == 'error') {
+				container.style.backgroundColor = '#ffaa99';
+			} else {
+				container.style.backgroundColor = '#aaff99';
+			}
+
+			container.innerHTML = msg;
+		}
+
+		function testUtmToGeo(utmCoord, geoCoord) {
+			geoTransformed = utmCoord.toGeodesic();
+
+			if(!geoCoord.equals(geoTransformed)) {
+				var msg = '';
+				msg += 'UTM to Geographic transform test failed: <br />';
+				msg += geoCoord.toString() + ' does not correspond to <br/>' + geoTransformed.toString();
+				throw new Error(msg);
+			}
+
+			return true;
+		}
+
+		function testGeoToUTM(geoCoord, utmCoord) {
+			utmTransformed = geoCoord.toUTM();
+			if(!utmCoord.equals(utmTransformed)) {
+				var msg = '';
+				msg += 'Geographic to UTM transform test failed: <br />';
+				msg += utmCoord.toString() + ' does not correspond to <br/>' + utmTransformed.toString();
+				throw new Error(msg);
+			}
+
+			return true;
+		}
+
+		function test() {
+			//entry coord:     latitude: 10°10'51.94" S longitude: 48°20'17.16" W
+			//output expected: E: 791668.000, N: 8873367.000 Zone: 22
+
+			ellipsoid = new Ellipsoid(DatumFactory.SIRGAS);
+			latitude  = new Latitude (AngleValue.dms2dd(10, 10, 51.94, false));
+			longitude = new Longitude(AngleValue.dms2dd(48, 20, 17.16, false));
+
+			geoCoord = new GeographicCoordinate(ellipsoid, latitude, longitude);
+			utmCoord = new UTMCoordinate(ellipsoid, 22, Hemisphere.SOUTH, 791668.350, 8873367.715, 0.0);
+
+			var errorMessage = '';
+			try { 
+				testGeoToUTM(geoCoord, utmCoord); 
+			} catch(ex) {errorMessage += ex + '<br /><br />';}
+			try { 
+				testUtmToGeo(utmCoord, geoCoord); 
+			} catch(ex) {errorMessage += ex;}
+
+			var title = (errorMessage == '') ? 'test passed' : 'test failed';
+			var type  = (errorMessage == '') ? 'success' : 'error';
+			displayMessage('<h2>' + title + '</h2>' + '<p>' + errorMessage + '</p>', type);
+			
+			//logs(gcoord + " -> " + utcoord + " Zone: " + utcoord.getZone());
+		}
+	</script>
+
+	<!--script src="temp/CoordConverter-min.js"></script-->
+	<script src="src/JSExtension.js"></script>
+	<script src="src/AngleValue.js"></script>
+	<script src="src/Latitude.js"></script>
+	<script src="src/Longitude.js"></script>
+	<script src="src/GeographicCoordinate.js"></script>
+	<script src="src/UTMCoordinate.js"></script>
+	<script src="src/Point2D.js"></script>
+	<script src="src/Datum.js"></script>
+	<script src="src/Ellipsoid.js"></script>
+	<script src="src/TransverseMercator.js"></script>
+
+	</body>
+</html>
