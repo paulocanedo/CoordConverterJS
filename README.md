@@ -6,7 +6,7 @@ Coordinate conversor Geographic - UTM in javascript
 
 Usage
 -----
-
+```javascript
 	ellipsoid = new Ellipsoid(DatumFactory.SIRGAS);
 	latitude  = new Latitude (AngleValue.dms2dd(10, 10, 52.14396, false));
 	longitude = new Longitude(AngleValue.dms2dd(48, 20, 16.79136, false));
@@ -22,4 +22,4 @@ Usage
 	var geo = utmCoord.toGeodesic();
 	geo.getLatitude()  //Latitude object
 	geo.getLongitude() //Longitude object
-
+```
